@@ -29,87 +29,92 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const Drawer(),
-      appBar: AppBar(
-        title: const Text('Ahmadiyya Ghana'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
-          child: Column(
-            children: [
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                elevation: 2.5,
-                child: TextField(
-                  textInputAction: TextInputAction.search,
-                  controller: search,
-                  onSubmitted: (v) {
-                    if (v.isNotEmpty) {
+    return WillPopScope(
+      onWillPop: () async {
+        return !isSearching;
+      },
+      child: Scaffold(
+        drawer: const Drawer(),
+        appBar: AppBar(
+          title: const Text('Ahmadiyya Ghana'),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+            child: Column(
+              children: [
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: 2.5,
+                  child: TextField(
+                    textInputAction: TextInputAction.search,
+                    controller: search,
+                    onSubmitted: (v) {
+                      if (v.isNotEmpty) {
+                        setState(() {
+                          done = true;
+                        });
+                      }
+                    },
+                    onChanged: (v) {
                       setState(() {
-                        done = true;
+                        done = false;
                       });
-                    }
-                  },
-                  onChanged: (v) {
-                    setState(() {
-                      done = false;
-                    });
-                    goSearching(v.isNotEmpty);
-                  },
-                  onTap: () {},
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    prefixIcon: const Icon(Icons.search),
-                    hintText: 'Search by Aims code',
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.qr_code_outlined),
-                      onPressed: () {},
+                      goSearching(v.isNotEmpty);
+                    },
+                    onTap: () {},
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      prefixIcon: const Icon(Icons.search),
+                      hintText: 'Search by Aims code',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.qr_code_outlined),
+                        onPressed: () {},
+                      ),
                     ),
                   ),
                 ),
-              ),
-              h(20),
-              if (isSearching && !done)
-                Lottie.asset('assets/icons/search.json'),
-              StreamBuilder(
-                stream: MemberProvider().getMembers(),
-                builder: ((context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (done) {
-                      List<MemberModel> res = snapshot.data!.where((element) {
-                        return element.aimsCode.toString() ==
-                            search.text.trim();
-                      }).toList();
-                      if (res.isEmpty) {
-                        return const Center(
-                          child: Text('No results found'),
+                h(20),
+                if (isSearching && !done)
+                  Lottie.asset('assets/icons/search.json'),
+                StreamBuilder(
+                  stream: MemberProvider().getMembers(),
+                  builder: ((context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (done) {
+                        List<MemberModel> res = snapshot.data!.where((element) {
+                          return element.aimsCode.toString() ==
+                              search.text.trim();
+                        }).toList();
+                        if (res.isEmpty) {
+                          return const Center(
+                            child: Text('No results found'),
+                          );
+                        }
+                        return MemberCard(
+                          member: res.first,
                         );
                       }
-                      return MemberCard(
-                        member: res.first,
-                      );
+                      if (!isSearching && !done) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: snapshot.data!.map((e) {
+                            return MemberCard(member: e);
+                          }).toList(),
+                        );
+                      }
+                      return const SizedBox();
                     }
-                    if (!isSearching && !done) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: snapshot.data!.map((e) {
-                          return MemberCard(member: e);
-                        }).toList(),
-                      );
-                    }
-                    return const SizedBox();
-                  }
 
-                  return const CircularProgressIndicator();
-                }),
-              )
-            ],
+                    return const CircularProgressIndicator();
+                  }),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -10,7 +10,7 @@ class MemberProvider {
 
   Stream<List<MemberModel>> getMembers() async* {
     Future<List<MemberModel>> members() async {
-      var url = Uri.parse('http://192.168.9.100:1500/api/members');
+      var url = Uri.parse('https://ahmadiyyaghana.herokuapp.com/api/members');
 
       var req = http.Request('GET', url);
 
@@ -19,8 +19,10 @@ class MemberProvider {
 
       if (res.statusCode >= 200 && res.statusCode < 300) {
         var body = jsonDecode(resBody)["members"];
-        return List.generate(
-            body.length, ((index) => MemberModel.fromMap(body[index])));
+        return body.isEmpty
+            ? []
+            : List.generate(
+                body.length, ((index) => MemberModel.fromMap(body[index])));
       } else {}
       return [];
     }
