@@ -3,7 +3,7 @@ import 'package:ahmadiyyagh_registration/services/api.dart';
 import 'package:ahmadiyyagh_registration/utils/sizedboxes.dart';
 import 'package:ahmadiyyagh_registration/widgets/member_card.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:lottie/lottie.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController search = TextEditingController();
   bool isSearching = false;
-
+  bool done = false;
   goSearching(bool val) {
     setState(() {
       isSearching = val;
@@ -45,16 +45,28 @@ class _HomePageState extends State<HomePage> {
                 ),
                 elevation: 2.5,
                 child: TextField(
+                  textInputAction: TextInputAction.search,
                   controller: search,
                   onSubmitted: (v) {
+                    if (v.isNotEmpty) {
+                      setState(() {
+                        done = true;
+                      });
+                    }
+                  },
+                  onChanged: (v) {
+                    setState(() {
+                      done = false;
+                    });
                     goSearching(v.isNotEmpty);
                   },
+                  onTap: () {},
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                     prefixIcon: const Icon(Icons.search),
-                    hintText: 'Search',
+                    hintText: 'Search by Aims code',
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.qr_code_outlined),
                       onPressed: () {},
@@ -63,17 +75,16 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               h(20),
+              if (isSearching && !done)
+                Lottie.asset('assets/icons/search.json'),
               StreamBuilder(
                 stream: MemberProvider().getMembers(),
                 builder: ((context, snapshot) {
                   if (snapshot.hasData) {
-                    if (isSearching) {
+                    if (done) {
                       List<MemberModel> res = snapshot.data!.where((element) {
                         return element.aimsCode.toString() ==
-                                search.text.trim() ||
-                            element.name
-                                .toLowerCase()
-                                .contains(search.text.trim().toLowerCase());
+                            search.text.trim();
                       }).toList();
                       if (res.isEmpty) {
                         return const Center(
@@ -84,13 +95,17 @@ class _HomePageState extends State<HomePage> {
                         member: res.first,
                       );
                     }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: snapshot.data!.map((e) {
-                        return MemberCard(member: e);
-                      }).toList(),
-                    );
+                    if (!isSearching && !done) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: snapshot.data!.map((e) {
+                          return MemberCard(member: e);
+                        }).toList(),
+                      );
+                    }
+                    return const SizedBox();
                   }
+
                   return const CircularProgressIndicator();
                 }),
               )

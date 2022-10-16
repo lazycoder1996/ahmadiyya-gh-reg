@@ -18,13 +18,20 @@ class MemberCard extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
+            Hero(
+              tag: 'profile picture',
+              child: CircleAvatar(
+                radius: 50,
+                backgroundImage: Image.asset('assets/images/rahman.jpeg').image,
+              ),
+            ),
+            const Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const Text('Name'),
-                const Spacer(),
                 Text(
                   member.name,
                   style: const TextStyle(
@@ -32,29 +39,11 @@ class MemberCard extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-              ],
-            ),
-            h(10),
-            Row(
-              children: [
-                const Text('Zone'),
-                const Spacer(),
+                h(10),
                 Text(member.zone),
-              ],
-            ),
-            h(10),
-            Row(
-              children: [
-                const Text('Aims Code'),
-                const Spacer(),
+                h(10),
                 Text(member.aimsCode.toString()),
-              ],
-            ),
-            h(10),
-            Row(
-              children: [
-                const Text('Contact'),
-                const Spacer(),
+                h(10),
                 Text(member.contact ?? 'N/A'),
               ],
             ),
