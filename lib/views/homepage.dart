@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ahmadiyyagh_registration/models/member.dart';
 import 'package:ahmadiyyagh_registration/services/api.dart';
 import 'package:ahmadiyyagh_registration/utils/sizedboxes.dart';
+import 'package:ahmadiyyagh_registration/widgets/drawer.dart';
 import 'package:ahmadiyyagh_registration/widgets/member_card.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -77,7 +78,7 @@ class _HomePageState extends State<HomePage> {
         return !isSearching;
       },
       child: Scaffold(
-        drawer: const Drawer(),
+        drawer: const CustomDrawer(),
         appBar: AppBar(
           title: const Text('Ahmadiyya Ghana'),
         ),

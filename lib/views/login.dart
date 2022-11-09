@@ -1,7 +1,8 @@
-import 'package:ahmadiyyagh_registration/services/fetch_role.dart';
+import 'package:ahmadiyyagh_registration/services/user_provider.dart';
 import 'package:ahmadiyyagh_registration/utils/navigation.dart';
 import 'package:ahmadiyyagh_registration/views/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../main.dart';
 import '../utils/sizedboxes.dart';
 
@@ -30,6 +31,10 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFormField(
+                    cursorColor: Colors.black,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
                     validator: (st) {
                       if (st!.isEmpty) {
                         return 'Field is required';
@@ -46,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                         Icons.code,
                         // color: Colors.black,
                       ),
-                      labelText: 'Aims Code',
+                      hintText: 'Aims Code',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         // borderSide: const BorderSide(color: Colors.black),
@@ -83,7 +88,9 @@ class _LoginPageState extends State<LoginPage> {
                               setState(() {
                                 isLoading = true;
                               });
-                              await fetchRole(aimsCode.text.trim())
+                              await Provider.of<UserProvider>(context,
+                                      listen: false)
+                                  .login(aimsCode.text.trim())
                                   .then((value) async {
                                 setState(() {
                                   role = value!;

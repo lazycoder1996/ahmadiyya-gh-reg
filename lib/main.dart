@@ -1,4 +1,5 @@
 import 'package:ahmadiyyagh_registration/services/api.dart';
+import 'package:ahmadiyyagh_registration/services/user_provider.dart';
 import 'package:ahmadiyyagh_registration/views/homepage.dart';
 import 'package:ahmadiyyagh_registration/views/login.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<MemberProvider>(create: (_) => MemberProvider()),
+        ChangeNotifierProvider<UserProvider>(
+            create: (context) => UserProvider()),
+        Provider<MemberProvider>(create: (context) => MemberProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData.dark().copyWith(
@@ -42,6 +45,9 @@ class _MyAppState extends State<MyApp> {
             prefixIconColor: Colors.black,
             suffixIconColor: Colors.black,
             hintStyle: const TextStyle(
+              color: Colors.black,
+            ),
+            labelStyle: const TextStyle(
               color: Colors.black,
             ),
             border: OutlineInputBorder(
