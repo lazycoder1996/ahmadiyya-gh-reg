@@ -1,13 +1,17 @@
 import 'dart:io';
 
 import 'package:ahmadiyyagh_registration/models/member.dart';
-import 'package:ahmadiyyagh_registration/services/api.dart';
+import 'package:ahmadiyyagh_registration/services/member_provider.dart';
+import 'package:ahmadiyyagh_registration/services/user_provider.dart';
 import 'package:ahmadiyyagh_registration/utils/sizedboxes.dart';
 import 'package:ahmadiyyagh_registration/widgets/drawer.dart';
 import 'package:ahmadiyyagh_registration/widgets/member_card.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+
+import 'add_member.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -71,6 +75,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  MemberModel get user =>
+      Provider.of<UserProvider>(context, listen: false).member;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -78,9 +84,29 @@ class _HomePageState extends State<HomePage> {
         return !isSearching;
       },
       child: Scaffold(
-        drawer: const CustomDrawer(),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const AddMember());
+          },
+        ),
+        // drawer: const CustomDrawer(),
         appBar: AppBar(
           title: const Text('Ahmadiyya Ghana'),
+          actions: user.role! < 2
+              ? null
+              : [
+                  IconButton(
+                    onPressed: () async {
+                      await Provider.of<UserProvider>(context, listen: false)
+                          .logout(context);
+                    },
+                    icon: const Icon(Icons.logout),
+                  ),
+                ],
         ),
         body: SingleChildScrollView(
           child: Padding(

@@ -1,4 +1,4 @@
-import 'package:ahmadiyyagh_registration/services/api.dart';
+import 'package:ahmadiyyagh_registration/services/member_provider.dart';
 import 'package:ahmadiyyagh_registration/services/user_provider.dart';
 import 'package:ahmadiyyagh_registration/views/homepage.dart';
 import 'package:ahmadiyyagh_registration/views/login.dart';
@@ -38,30 +38,30 @@ class _MyAppState extends State<MyApp> {
         Provider<MemberProvider>(create: (context) => MemberProvider()),
       ],
       child: MaterialApp(
-        theme: ThemeData.dark().copyWith(
-          inputDecorationTheme: InputDecorationTheme(
-            fillColor: Colors.white,
-            filled: true,
-            prefixIconColor: Colors.black,
-            suffixIconColor: Colors.black,
-            hintStyle: const TextStyle(
-              color: Colors.black,
-            ),
-            labelStyle: const TextStyle(
-              color: Colors.black,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          progressIndicatorTheme: const ProgressIndicatorThemeData(
-            circularTrackColor: Colors.black,
-            color: Colors.white,
-          ),
-        ),
+        // theme: ThemeData.dark().copyWith(
+        //   inputDecorationTheme: InputDecorationTheme(
+        //     fillColor: Colors.white,
+        //     filled: true,
+        //     prefixIconColor: Colors.black,
+        //     suffixIconColor: Colors.black,
+        //     hintStyle: const TextStyle(
+        //       color: Colors.black,
+        //     ),
+        //     labelStyle: const TextStyle(
+        //       color: Colors.black,
+        //     ),
+        //     border: OutlineInputBorder(
+        //       borderRadius: BorderRadius.circular(10),
+        //     ),
+        //     focusedBorder: OutlineInputBorder(
+        //       borderRadius: BorderRadius.circular(10),
+        //     ),
+        //   ),
+        //   progressIndicatorTheme: const ProgressIndicatorThemeData(
+        //     circularTrackColor: Colors.black,
+        //     color: Colors.white,
+        //   ),
+        // ),
         debugShowCheckedModeBanner: false,
         home: SafeArea(
           child: loggedIn ? const HomePage() : const LoginPage(),

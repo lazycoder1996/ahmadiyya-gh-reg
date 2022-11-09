@@ -7,7 +7,8 @@ import 'package:ahmadiyyagh_registration/models/member.dart';
 import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
-  late MemberModel member;
+  late MemberModel _member = returnUserDetails();
+  MemberModel get member => _member;
   Future<int?> login(String aimsCode) async {
     var url =
         Uri.parse('https://ahmadiyyaghana.herokuapp.com/api/members/$aimsCode');
@@ -16,10 +17,17 @@ class UserProvider extends ChangeNotifier {
     var res = await req.send();
     final resBody = await res.stream.bytesToString();
     if (res.statusCode >= 200 && res.statusCode < 300) {
-      member = MemberModel.fromMap(jsonDecode(resBody)["member"]);
-      notifyListeners();
+      _member = MemberModel.fromMap(jsonDecode(resBody)["member"]);
+      if (member.id == 0) {
+        return -2;
+      } else if (_member.role! > 0) {
+        await saveUserDetails(member);
+        notifyListeners();
+      }
       return member.role;
-    } else {}
+    } else {
+      print(resBody);
+    }
     return null;
   }
 
@@ -28,4 +36,30 @@ class UserProvider extends ChangeNotifier {
       toLogin(context);
     });
   }
+}
+
+saveUserDetails(MemberModel member) async {
+  Map<String, dynamic> map = member.toMap();
+  List<String> userDetails = [];
+  for (var element in map.values) {
+    userDetails.add(element.toString());
+  }
+  await prefs.setStringList('userDetails', userDetails);
+}
+
+returnUserDetails() {
+  List<String> userDetails = prefs.getStringList('userDetails') ?? [];
+  return MemberModel(
+    id: int.parse(userDetails[0]),
+    name: userDetails[1],
+    hometown: userDetails[2],
+    father: userDetails[3],
+    mother: userDetails[4],
+    position: userDetails[5],
+    contact: userDetails[6],
+    aimsCode: int.parse(userDetails[7]),
+    wassiyat: int.tryParse(userDetails[8]),
+    role: int.parse(userDetails[9]),
+    zone: userDetails[10],
+  );
 }
