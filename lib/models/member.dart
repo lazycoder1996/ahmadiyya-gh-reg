@@ -71,17 +71,17 @@ class MemberModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'name': name,
-      'hometown': hometown,
-      'father': father,
-      'mother': mother,
-      'position': position,
-      'contact': contact,
-      'aimsCode': aimsCode,
-      'wassiyat': wassiyat,
-      'role': role,
-      'zone': zone,
+      'ID': id,
+      'Fullname': name,
+      'Hometown': hometown,
+      'Father': father,
+      'Mother': mother,
+      'Position': position,
+      'Contact': contact,
+      'AimsCode': aimsCode,
+      'Wassiyat': wassiyat,
+      'Role': role,
+      'Zone': zone,
     };
   }
 

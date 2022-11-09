@@ -25,7 +25,7 @@ class MemberCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Hero(
-                tag: 'profile picture',
+                tag: member.id,
                 child: CircleAvatar(
                   radius: 50,
                   backgroundImage:

@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:ahmadiyyagh_registration/models/member.dart';
 import 'package:ahmadiyyagh_registration/services/api.dart';
 import 'package:ahmadiyyagh_registration/utils/sizedboxes.dart';
 import 'package:ahmadiyyagh_registration/widgets/member_card.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,9 +16,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  QRViewController? controller;
   TextEditingController search = TextEditingController();
   bool isSearching = false;
   bool done = false;
+
   goSearching(bool val) {
     setState(() {
       isSearching = val;
@@ -23,8 +30,44 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller?.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller?.resumeCamera();
+    }
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        result = scanData;
+      });
+    });
+  }
+
+  @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    search.dispose();
+    super.dispose();
+  }
+
+  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
+    if (!p) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('no Permission')),
+      );
+    }
   }
 
   @override
@@ -73,7 +116,28 @@ class _HomePageState extends State<HomePage> {
                       hintText: 'Search by Aims code',
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.qr_code_outlined),
-                        onPressed: () {},
+                        onPressed: () async {
+                          var scanArea =
+                              (MediaQuery.of(context).size.width < 400 ||
+                                      MediaQuery.of(context).size.height < 400)
+                                  ? 200.0
+                                  : 350.0;
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return QRView(
+                              key: qrKey,
+                              onQRViewCreated: _onQRViewCreated,
+                              overlay: QrScannerOverlayShape(
+                                  borderColor: Colors.red,
+                                  borderRadius: 10,
+                                  borderLength: 30,
+                                  borderWidth: 10,
+                                  cutOutSize: scanArea),
+                              onPermissionSet: (ctrl, p) =>
+                                  _onPermissionSet(context, ctrl, p),
+                            );
+                          }));
+                        },
                       ),
                     ),
                   ),
