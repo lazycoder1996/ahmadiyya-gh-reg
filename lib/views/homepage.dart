@@ -84,29 +84,29 @@ class _HomePageState extends State<HomePage> {
         return !isSearching;
       },
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => const AddMember());
-          },
-        ),
+        floatingActionButton: user.role! < 2
+            ? null
+            : FloatingActionButton(
+                child: const Icon(Icons.add),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) => const AddMember());
+                },
+              ),
         // drawer: const CustomDrawer(),
         appBar: AppBar(
           title: const Text('Ahmadiyya Ghana'),
-          actions: user.role! < 2
-              ? null
-              : [
-                  IconButton(
-                    onPressed: () async {
-                      await Provider.of<UserProvider>(context, listen: false)
-                          .logout(context);
-                    },
-                    icon: const Icon(Icons.logout),
-                  ),
-                ],
+          actions: [
+            IconButton(
+              onPressed: () async {
+                await Provider.of<UserProvider>(context, listen: false)
+                    .logout(context);
+              },
+              icon: const Icon(Icons.logout),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Padding(
