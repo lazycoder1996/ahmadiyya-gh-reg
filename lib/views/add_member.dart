@@ -31,51 +31,47 @@ class _AddMemberState extends State<AddMember> {
         'Add new member',
         // style: TextStyle(color: Colors.black),
       ),
-      content: Row(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomTextField(
-                  controller: name,
-                  labelText: 'Fullname',
-                ),
-                CustomTextField(
-                  controller: father,
-                  labelText: 'Father\'s name',
-                ),
-                CustomTextField(
-                  controller: mother,
-                  labelText: 'Mother\'s name',
-                ),
-                CustomTextField(
-                  controller: hometown,
-                  labelText: 'Hometown',
-                ),
-                CustomTextField(
-                  controller: aims,
-                  labelText: 'Aims code',
-                  textInputType: TextInputType.number,
-                ),
-                CustomTextField(
-                  controller: wassiyat,
-                  textInputType: TextInputType.number,
-                  labelText: 'Wassiyat No.',
-                ),
-                CustomDropdown(
-                    value: zone,
-                    labelText: 'Zone',
-                    items: const ['Kumasi', 'Mankessim', 'Accra', 'Wa'],
-                    onChanged: (val) {
-                      setState(() {
-                        zone = val;
-                      });
-                    }),
-              ],
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomTextField(
+              controller: name,
+              labelText: 'Fullname',
             ),
-          ),
-        ],
+            CustomTextField(
+              controller: father,
+              labelText: 'Father\'s name',
+            ),
+            CustomTextField(
+              controller: mother,
+              labelText: 'Mother\'s name',
+            ),
+            CustomTextField(
+              controller: hometown,
+              labelText: 'Hometown',
+            ),
+            CustomTextField(
+              controller: aims,
+              labelText: 'Aims code',
+              textInputType: TextInputType.number,
+            ),
+            CustomTextField(
+              controller: wassiyat,
+              textInputType: TextInputType.number,
+              labelText: 'Wassiyat No.',
+            ),
+            CustomDropdown(
+                value: zone,
+                labelText: 'Zone',
+                items: const ['Kumasi', 'Mankessim', 'Accra', 'Wa'],
+                onChanged: (val) {
+                  setState(() {
+                    zone = val;
+                  });
+                }),
+          ],
+        ),
       ),
       actions: [
         TextButton(
