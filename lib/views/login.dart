@@ -106,7 +106,8 @@ class _LoginPageState extends State<LoginPage> {
                                         await prefs
                                             .setBool('loggedIn', true)
                                             .then((v) {
-                                          toScreen(context, const HomePage());
+                                          removeToScreen(
+                                              context, const HomePage());
                                         });
                                       }
                                       role = -1;

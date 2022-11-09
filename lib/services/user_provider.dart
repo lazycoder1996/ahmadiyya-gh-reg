@@ -1,5 +1,6 @@
 import 'package:ahmadiyyagh_registration/main.dart';
 import 'package:ahmadiyyagh_registration/utils/navigation.dart';
+import 'package:ahmadiyyagh_registration/views/login.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
@@ -33,7 +34,7 @@ class UserProvider extends ChangeNotifier {
 
   Future<void> logout(context) async {
     await prefs.setBool('loggedIn', false).then((value) {
-      toLogin(context);
+      removeToScreen(context, const LoginPage());
     });
   }
 }

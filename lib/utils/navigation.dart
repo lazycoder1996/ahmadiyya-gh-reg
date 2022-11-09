@@ -10,8 +10,7 @@ replaceScreen(BuildContext context, page) {
       .pushReplacement(MaterialPageRoute(builder: (context) => page));
 }
 
-toLogin(BuildContext context) {
+removeToScreen(BuildContext context, page) {
   Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-      (route) => false);
+      MaterialPageRoute(builder: (context) => page), (route) => false);
 }
