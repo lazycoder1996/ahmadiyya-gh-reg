@@ -4,13 +4,15 @@ import 'dart:convert';
 import 'package:ahmadiyyagh_registration/models/member.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/app_constants.dart';
+
 class MemberProvider {
   late final Stream<List<MemberModel>> _members;
   Stream<List<MemberModel>> get members => _members;
 
   Stream<List<MemberModel>> getMembers() async* {
     Future<List<MemberModel>> members() async {
-      var url = Uri.parse('https://ahmadiyyaghana.herokuapp.com/api/members');
+    var url = Uri.parse(AppConstants.baseUrl + AppConstants.members);
 
       var req = http.Request('GET', url);
 
@@ -42,7 +44,7 @@ class MemberProvider {
     required String aims,
     String? wassiyat,
   }) async {
-    var url = Uri.parse('https://ahmadiyyaghana.herokuapp.com/api/members');
+    var url = Uri.parse(AppConstants.baseUrl + AppConstants.members);
 
     Map<String, String> body = {
       "Fullname": fullname,

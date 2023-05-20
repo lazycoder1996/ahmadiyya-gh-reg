@@ -7,12 +7,13 @@ import 'dart:convert';
 import 'package:ahmadiyyagh_registration/models/member.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/app_constants.dart';
+
 class UserProvider extends ChangeNotifier {
   late MemberModel _member = returnUserDetails();
   MemberModel get member => _member;
   Future<int?> login(String aimsCode) async {
-    var url =
-        Uri.parse('https://ahmadiyyaghana.herokuapp.com/api/members/$aimsCode');
+    var url = Uri.parse('${AppConstants.baseUrl}${AppConstants.members}/$aimsCode');
 
     var req = http.Request('GET', url);
     var res = await req.send();
